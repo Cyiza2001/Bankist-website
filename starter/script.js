@@ -12,7 +12,8 @@ const btnNavLink = document.querySelector(".nav__links");
 const btnSections = document.querySelectorAll('.section');
 const tabs = document.querySelectorAll('.operations__tab');
 const tabsContainer = document.querySelector('.operations__tab-container');
-const tabsContent = document.querySelectorAll('.operations__content')
+const tabsContent = document.querySelectorAll('.operations__content');
+const nav = document.querySelector('.nav');
 
 const openModal = function (e) {
   e.preventDefault();
@@ -33,6 +34,24 @@ document.addEventListener('keydown', function (e) {
     closeModal();
   }
 });
+///////////////////////////////////////////
+//////Functions
+const handleFunction=function(e){
+  console.log(this,e.currentTarget);
+
+  if(e.target.classList.contains('nav__link')){
+    const link=e.target;
+    const siblings=link.closest('.nav').querySelectorAll('.nav__link');
+
+    const logo=link.closest('.nav').querySelector('img');
+
+    siblings.forEach(el=>{
+      if(el !==link) el.style.opacity=this;
+    })
+    
+    logo.style.opacity=this;
+  }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////EventListners
@@ -60,7 +79,12 @@ tabsContainer.addEventListener('click', function(e){
   clicked.classList.add('operations__tab--active');
   document.querySelector(`.operations__content--${clicked.dataset.tab}`).classList.add('operations__content--active');
 
-})
+});
+nav.addEventListener('mouseover',handleFunction.bind(0.5)
+);
+nav.addEventListener('mouseout',
+  handleFunction.bind(1)
+);
 
 
 
@@ -68,3 +92,5 @@ tabsContainer.addEventListener('click', function(e){
 
 
 
+
+ 
