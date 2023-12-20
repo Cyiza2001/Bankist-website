@@ -14,6 +14,9 @@ const tabs = document.querySelectorAll('.operations__tab');
 const tabsContainer = document.querySelector('.operations__tab-container');
 const tabsContent = document.querySelectorAll('.operations__content');
 const nav = document.querySelector('.nav');
+const header =  document.querySelector('.header');
+const section1 = document.querySelector('#section--1');
+const allSections = document.querySelectorAll('.section');
 
 const openModal = function (e) {
   e.preventDefault();
@@ -37,7 +40,6 @@ document.addEventListener('keydown', function (e) {
 ///////////////////////////////////////////
 //////Functions
 const handleFunction=function(e){
-  console.log(this,e.currentTarget);
 
   if(e.target.classList.contains('nav__link')){
     const link=e.target;
@@ -58,7 +60,7 @@ const handleFunction=function(e){
 
 btnScroll.addEventListener('click', function(e){
   e.preventDefault();
-  const section1 = document.querySelector('#section--1');
+ 
   section1.scrollIntoView({ behavior:'smooth'});
 });
 btnNavLink.addEventListener('click',function(e){
@@ -85,6 +87,38 @@ nav.addEventListener('mouseover',handleFunction.bind(0.5)
 nav.addEventListener('mouseout',
   handleFunction.bind(1)
 );
+
+const obsCallBack = function(entries){
+const [entry] = entries;
+if(!entry.isIntersecting) nav.classList.add('sticky');
+else nav.classList.remove('sticky');
+}
+const navHeight = nav.getBoundingClientRect().height;
+const obsOptions = {
+  root : null,
+  threshold :0,
+  rootMargin: `-${navHeight}px`,
+}
+const observer = new IntersectionObserver(obsCallBack , obsOptions);
+observer.observe(header);
+const revealSection = function(entries , observer){
+  const [entry] = entries;
+  if(!entry.isIntersecting) return;
+  entry.target.classList.remove('section--hidden');
+  observer.unobserve(section);
+  
+
+}
+const observeSection = new IntersectionObserver (revealSection , {
+  root: null,
+  threshold: 0.15,
+})
+
+allSections.forEach(function(section){
+  observeSection.observe(section);
+  section.classList.add('section--hidden');
+  
+})
 
 
 
