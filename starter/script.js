@@ -18,6 +18,10 @@ const header =  document.querySelector('.header');
 const section1 = document.querySelector('#section--1');
 const allSections = document.querySelectorAll('.section');
 const imageTargets = document.querySelectorAll('img[data-src]');
+const slides = document.querySelectorAll('.slide');
+const slider = document.querySelector('.slider');
+const btnRight = document.querySelector('.slider__btn--right');
+const btnLeft = document.querySelector('.slider__btn--left');
 
 const openModal = function (e) {
   e.preventDefault();
@@ -117,7 +121,7 @@ const observeSection = new IntersectionObserver (revealSection , {
 
 allSections.forEach(function(section){
   observeSection.observe(section);
-  section.classList.add('section--hidden');
+  //section.classList.add('section--hidden');
   
 })
 const loadImage = function(entries,observer){
@@ -137,8 +141,42 @@ const observeImage = new IntersectionObserver(loadImage, {
   rootMargin:'200px',
 
 })
+let curSlide = 0;
+
+const maxSlide = slides.length;
 
 imageTargets.forEach(img => observeImage.observe(img));
+//function to move into slides
+const goToSlide = function (slide){
+  slides.forEach((s , i) => s.style.transform =`translateX(${100*(i-slide)}%)`);
+}
+//initial slide status
+goToSlide(0);
+//next slide function
+ const nextSlide = function(){
+
+  if(curSlide=== maxSlide-1){
+    curSlide =0;
+ }
+    else {
+      curSlide++;
+     }
+     goToSlide(curSlide);
+  }
+  //previous slide function
+  const prevSlide=  function(){
+
+    if(curSlide===0) {
+      curSlide = maxSlide-1;
+    }
+      else {
+        curSlide--;
+       }
+       goToSlide(curSlide);
+    }
+
+btnRight.addEventListener('click',nextSlide);
+btnLeft.addEventListener('click',prevSlide);
 
 
 
