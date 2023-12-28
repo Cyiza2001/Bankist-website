@@ -22,6 +22,7 @@ const slides = document.querySelectorAll('.slide');
 const slider = document.querySelector('.slider');
 const btnRight = document.querySelector('.slider__btn--right');
 const btnLeft = document.querySelector('.slider__btn--left');
+const dotsContainer = document.querySelector('.dots');
 
 const openModal = function (e) {
   e.preventDefault();
@@ -141,17 +142,24 @@ const observeImage = new IntersectionObserver(loadImage, {
   rootMargin:'200px',
 
 })
+imageTargets.forEach(img => observeImage.observe(img));
+
+const sliderFunction = function (){
 let curSlide = 0;
 
 const maxSlide = slides.length;
 
-imageTargets.forEach(img => observeImage.observe(img));
+
 //function to move into slides
 const goToSlide = function (slide){
   slides.forEach((s , i) => s.style.transform =`translateX(${100*(i-slide)}%)`);
 }
-//initial slide status
-goToSlide(0);
+
+//change slide function
+const changeSlide = function (s){
+  goToSlide(s);
+  activateDots(s);
+}
 //next slide function
  const nextSlide = function(){
 
@@ -161,7 +169,7 @@ goToSlide(0);
     else {
       curSlide++;
      }
-     goToSlide(curSlide);
+   changeSlide(curSlide);
   }
   //previous slide function
   const prevSlide=  function(){
@@ -170,13 +178,46 @@ goToSlide(0);
       curSlide = maxSlide-1;
     }
       else {
+ 
         curSlide--;
        }
-       goToSlide(curSlide);
+       changeSlide(curSlide);
     }
+const createDots = function(){
+    slides.forEach(function(_, i){
+      dotsContainer.insertAdjacentHTML('beforeend', 
+      `<button class="dots__dot" data-slide="${i}"></button>`
+      )
+    })};
+const activateDots = function(slide){
+  document.querySelectorAll('.dots__dot').forEach( dot =>dot.classList.remove('dots__dot--active')
+)
+  document.querySelector(`.dots__dot[data-slide ="${slide}"]`).classList.add('dots__dot--active')
+}
 
+//initial status
+const initial = function (){
+  createDots();
+  changeSlide(0);
+}
+initial();
 btnRight.addEventListener('click',nextSlide);
 btnLeft.addEventListener('click',prevSlide);
+document.addEventListener('keydown',function(e){
+if (e.key === 'ArrowLeft') prevSlide();
+if(e.key === 'ArrowRight') nextSlide();
+});
+dotsContainer.addEventListener('click', function (e){
+if(e.target.classList.contains('dots__dot')){
+const {slide} = e.target.dataset;
+changeSlide(Slide);
+}
+
+})}
+
+sliderFunction();
+
+
 
 
 
